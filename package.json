@@ -1,0 +1,38 @@
+{
+  "name": "react-native-gravityform-component",
+  "version": "1.0.0",
+  "description": "A component for displaying Gravity Forms on React Native apps via the Wordpress API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SethCWhiting/react-native-gravityform-component.git"
+  },
+  "keywords": [
+    "React",
+    "Native",
+    "Gravity",
+    "Form",
+    "Forms",
+    "GravityForms",
+    "Component",
+    "Wordpress",
+    "API",
+    "Headless",
+    "CMS"
+  ],
+  "author": "Seth C Whiting",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SethCWhiting/react-native-gravityform-component/issues"
+  },
+  "homepage": "https://github.com/SethCWhiting/react-native-gravityform-component#readme",
+  "dependencies": {
+    "react": "^16.7.0",
+    "react-native": "^0.58.3",
+    "react-native-base64": "0.0.2",
+    "react-native-form-validator": "^0.2.0"
+  }
+}
