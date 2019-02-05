@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SethCWhiting/react-native-gravityform-component.git"
+    "url": "git+https://github.com/sethcwhiting/react-native-gravityform-component.git"
   },
   "keywords": [
     "React",
@@ -26,10 +26,10 @@
   "author": "Seth C Whiting",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/SethCWhiting/react-native-gravityform-component/issues"
+    "url": "https://github.com/sethcwhiting/react-native-gravityform-component/issues"
   },
-  "homepage": "https://github.com/SethCWhiting/react-native-gravityform-component#readme",
-  "dependencies": {
+  "homepage": "https://github.com/sethcwhiting/react-native-gravityform-component#readme",
+  "devDependencies": {
     "react": "^16.7.0",
     "react-native": "^0.58.3",
     "react-native-base64": "0.0.2",
