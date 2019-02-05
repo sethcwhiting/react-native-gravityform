@@ -24,7 +24,7 @@ export default class GravityForm extends Component {
         return new Promise((resolve, reject) => {
             const credentialString = this.credentials.userName + ':' + this.credentials.password
             const encodedCredentials = base64.encode(credentialString)
-            fetch(this.siteURL + '/wp-json/gf/v2/forms/' + this.formID, {
+            fetch(`${this.siteURL}/wp-json/gf/v2/forms/${this.formID}`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',
@@ -46,7 +46,7 @@ export default class GravityForm extends Component {
                     ({ item }) =>
                         <Text>{item.label}</Text>
                 }
-                keyExtractor={(item) => item.key}
+                keyExtractor={(item) => item.id.toString()}
             />
         )
     }
