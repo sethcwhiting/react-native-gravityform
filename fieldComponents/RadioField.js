@@ -4,7 +4,7 @@ import { View, Text } from 'react-native'
 export default class RadioField extends Component {
     constructor(props) {
         super(props)
-        this.data = this.props.data;
+        this.data = this.props.data
     }
 
     render() {
