@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { ScrollView, Text } from 'react-native'
 // import ValidationComponent from 'react-native-form-validator'
 import base64 from 'react-native-base64'
-import { HiddenField, HtmlField, CheckboxField, SectionField, NameField, PhoneField, EmailField, TextField, AddressField, SelectField, RadioField, NumberField } from './fieldComponents';
+import { HiddenField, HtmlField, CheckboxField, SectionField, NameField, PhoneField, EmailField, TextField, AddressField, SelectField, RadioField, NumberField } from './fieldComponents'
 
 export default class GravityForm extends Component {
     constructor(props) {
@@ -10,11 +10,12 @@ export default class GravityForm extends Component {
         this.siteURL = this.props.siteURL
         this.formID = this.props.formID
         this.credentials = this.props.credentials
+        this.style = this.props.style
         this.state = {
             formData: {},
             fieldValues: {},
         }
-        this.handleFieldChange = this.handleFieldChange.bind(this);
+        this.handleFieldChange = this.handleFieldChange.bind(this)
     }
 
     componentDidMount() {
@@ -46,53 +47,29 @@ export default class GravityForm extends Component {
                 ...this.state.fieldValues,
                 [fieldId]: value
             }
-        });
+        })
+    }
+
+    fieldComponents = {
+        hidden: HiddenField,
+        html: HtmlField,
+        checkbox: CheckboxField,
+        section: SectionField,
+        name: NameField,
+        phone: PhoneField,
+        email: EmailField,
+        text: TextField,
+        address: AddressField,
+        select: SelectField,
+        radio: RadioField,
+        number: NumberField,
     }
 
     render() {
-        console.log(this.state)
-        const fields = this.state.formData.fields && this.state.formData.fields.map((field, index) => {
-            switch (field.type) {
-                case 'hidden':
-                    return <HiddenField key={field.id.toString()} data={field} />
-
-                case 'html':
-                    return <HtmlField key={field.id.toString()} data={field} />
-
-                case 'checkbox':
-                    return <CheckboxField key={field.id.toString()} data={field} />
-
-                case 'section':
-                    return <SectionField key={field.id.toString()} data={field} />
-
-                case 'name':
-                    return <NameField key={field.id.toString()} data={field} />
-
-                case 'phone':
-                    return <PhoneField key={field.id.toString()} data={field} />
-
-                case 'email':
-                    return <EmailField key={field.id.toString()} data={field} />
-
-                case 'text':
-                    return <TextField key={field.id.toString()} data={field} onChange={this.handleFieldChange} />
-
-                case 'address':
-                    return <AddressField key={field.id.toString()} data={field} />
-
-                case 'select':
-                    return <SelectField key={field.id.toString()} data={field} />
-
-                case 'radio':
-                    return <RadioField key={field.id.toString()} data={field} />
-
-                case 'number':
-                    return <NumberField key={field.id.toString()} data={field} />
-
-                default:
-                    return <Text key={index} style={{ color: 'red', fontWeight: 'bold' }}>No component made for type {field.type}</Text>
-            }
-        });
+        const fields = this.state.formData.fields && this.state.formData.fields.map((field) => {
+            const FieldComponent = this.fieldComponents[field.type || 'text']
+            return <FieldComponent key={field.id.toString()} data={field} onChange={this.handleFieldChange} style={this.style} />
+        })
         return (
             <ScrollView>
                 {fields}
