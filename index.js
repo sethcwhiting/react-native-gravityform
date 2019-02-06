@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import { StyleSheet, SafeAreaView, View, TextInput, TouchableOpacity, Text, FlatList } from 'react-native'
-import ValidationComponent from 'react-native-form-validator'
+import { ScrollView, Text } from 'react-native'
+// import ValidationComponent from 'react-native-form-validator'
 import base64 from 'react-native-base64'
+import { HiddenField, HtmlField, CheckboxField, SectionField, NameField, PhoneField, EmailField, TextField, AddressField, SelectField, RadioField, NumberField } from './fieldComponents';
 
 export default class GravityForm extends Component {
     constructor(props) {
@@ -10,8 +11,10 @@ export default class GravityForm extends Component {
         this.formID = this.props.formID
         this.credentials = this.props.credentials
         this.state = {
-            formData: {}
+            formData: {},
+            fieldValues: {},
         }
+        this.handleFieldChange = this.handleFieldChange.bind(this);
     }
 
     componentDidMount() {
@@ -37,17 +40,63 @@ export default class GravityForm extends Component {
         })
     }
 
+    handleFieldChange(fieldId, value) {
+        this.setState({
+            fieldValues: {
+                ...this.state.fieldValues,
+                [fieldId]: value
+            }
+        });
+    }
+
     render() {
+        console.log(this.state)
+        const fields = this.state.formData.fields && this.state.formData.fields.map((field, index) => {
+            switch (field.type) {
+                case 'hidden':
+                    return <HiddenField key={field.id.toString()} data={field} />
+
+                case 'html':
+                    return <HtmlField key={field.id.toString()} data={field} />
+
+                case 'checkbox':
+                    return <CheckboxField key={field.id.toString()} data={field} />
+
+                case 'section':
+                    return <SectionField key={field.id.toString()} data={field} />
+
+                case 'name':
+                    return <NameField key={field.id.toString()} data={field} />
+
+                case 'phone':
+                    return <PhoneField key={field.id.toString()} data={field} />
+
+                case 'email':
+                    return <EmailField key={field.id.toString()} data={field} />
+
+                case 'text':
+                    return <TextField key={field.id.toString()} data={field} onChange={this.handleFieldChange} />
+
+                case 'address':
+                    return <AddressField key={field.id.toString()} data={field} />
+
+                case 'select':
+                    return <SelectField key={field.id.toString()} data={field} />
+
+                case 'radio':
+                    return <RadioField key={field.id.toString()} data={field} />
+
+                case 'number':
+                    return <NumberField key={field.id.toString()} data={field} />
+
+                default:
+                    return <Text key={index} style={{ color: 'red', fontWeight: 'bold' }}>No component made for type {field.type}</Text>
+            }
+        });
         return (
-            <FlatList
-                data={this.state.formData.fields}
-                ListEmptyComponent={<Text>Loading...</Text>}
-                renderItem={
-                    ({ item }) =>
-                        <Text>{item.label}</Text>
-                }
-                keyExtractor={(item) => item.id.toString()}
-            />
+            <ScrollView>
+                {fields}
+            </ScrollView>
         )
     }
 }
