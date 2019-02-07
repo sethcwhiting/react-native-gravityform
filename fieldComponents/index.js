@@ -1,5 +1,5 @@
 export { default as HiddenField } from './HiddenField'
-export { default as HtmlField } from 'react-native-gravityform-component/fieldComponents/HtmlField'
+export { default as HtmlField } from './HtmlField'
 export { default as CheckboxField } from './CheckboxField'
 export { default as SectionField } from './SectionField'
 export { default as NameField } from './NameField'
