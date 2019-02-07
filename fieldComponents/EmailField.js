@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, TextInput, StyleSheet } from 'react-native'
+import { View, Text, TextInput } from 'react-native'
 
 export default class EmailField extends Component {
     constructor(props) {
@@ -11,10 +11,6 @@ export default class EmailField extends Component {
 
     handleChange(text) {
         this.props.onChange(this.data.id, text)
-    }
-
-    styles() {
-        return StyleSheet.create(this.style)
     }
 
     render() {

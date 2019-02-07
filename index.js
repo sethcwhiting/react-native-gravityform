@@ -14,6 +14,7 @@ export default class GravityForm extends Component {
         this.state = {
             formData: {},
             fieldValues: {},
+            isLoading: true,
         }
         this.handleFieldChange = this.handleFieldChange.bind(this)
     }
@@ -24,7 +25,7 @@ export default class GravityForm extends Component {
                 this.setState({ formData })
                 return this.setDefaultValues(formData)
             })
-            .then(values => this.setState({ fieldValues: values }))
+            .then(values => this.setState({ fieldValues: values, isLoading: false }))
             .catch(err => console.warn('There was a problem retrieving form data: ', err))
     }
 
@@ -48,20 +49,62 @@ export default class GravityForm extends Component {
     setDefaultValues(formData) {
         return new Promise((resolve) => {
             let values = {}
+            let fieldCount = formData.fields.length
             formData.fields.forEach(field => {
-                values = { ...values, [field.id]: field.defaultValue }
-                if (Object.keys(values).length == formData.fields.length) resolve(values)
+                if (field.inputs) {
+                    fieldCount = fieldCount + field.inputs.length - 1
+                    field.inputs.forEach(input => {
+                        if (input.choices) {
+                            const selected = input.choices.filter(choice => {
+                                return choice.isSelected
+                            })
+                            values = {
+                                ...values,
+                                [input.id]: selected.length ? selected[0].value : '',
+                                [field.id]: {
+                                    ...values[field.id],
+                                    [input.id]: selected[0] ? selected[0].value : ''
+                                },
+                            }
+                        } else {
+                            values = {
+                                ...values,
+                                [input.id]: input.defaultValue ? input.defaultValue : '',
+                                [field.id]: {
+                                    ...values[field.id],
+                                    [input.id]: input.defaultValue ? input.defaultValue : ''
+                                },
+                            }
+                        }
+                    })
+                } else {
+                    values = { ...values, [field.id]: field.defaultValue }
+                }
+                if (Object.keys(values).length == fieldCount) resolve(values)
             })
         })
     }
 
-    handleFieldChange(fieldId, value) {
-        this.setState({
-            fieldValues: {
-                ...this.state.fieldValues,
-                [fieldId]: value
-            }
-        })
+    handleFieldChange(fieldId, value, inputId) {
+        if (inputId) {
+            this.setState({
+                fieldValues: {
+                    ...this.state.fieldValues,
+                    [inputId]: value,
+                    [fieldId]: {
+                        ...this.state.fieldValues[fieldId],
+                        [inputId]: value,
+                    },
+                }
+            })
+        } else {
+            this.setState({
+                fieldValues: {
+                    ...this.state.fieldValues,
+                    [fieldId]: value,
+                }
+            })
+        }
     }
 
     fieldComponents = {
@@ -80,9 +123,16 @@ export default class GravityForm extends Component {
     }
 
     render() {
+        if (this.state.isLoading) {
+            return (
+                <View style={{ flex: 1, backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center' }}>
+                    <Text>Fetching Gravity Form...</Text>
+                </View>
+            )
+        }
         const fields = this.state.formData.fields && this.state.formData.fields.map((field) => {
             if (Object.keys(this.fieldComponents).indexOf(field.type) < 0) {
-                console.warn(`React Native Gravityform Component: No field component currently available for type "${field.type}".`)
+                console.warn(`React Native Gravityform: No field component currently available for type "${field.type}".`)
                 return
             }
             const FieldComponent = this.fieldComponents[field.type || 'text']
@@ -91,7 +141,7 @@ export default class GravityForm extends Component {
                 data={field}
                 onChange={this.handleFieldChange}
                 style={this.style}
-                value={this.state.fieldValues[field.id.toString()]}
+                value={this.state.fieldValues[field.id]}
             />
         })
         return (

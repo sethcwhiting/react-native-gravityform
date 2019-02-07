@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, TextInput, StyleSheet } from 'react-native'
+import { View, Text, TextInput } from 'react-native'
 
 export default class PhoneField extends Component {
     constructor(props) {
@@ -11,10 +11,6 @@ export default class PhoneField extends Component {
 
     handleChange(number) {
         this.props.onChange(this.data.id, number)
-    }
-
-    styles() {
-        return StyleSheet.create(this.style)
     }
 
     render() {
