@@ -28,7 +28,7 @@ export default class RadioField extends Component {
                             this.props.value == choice.value ? this.style.selectedRadioButton : null
                         ]} />
                     </View>
-                    <Text style={[this.style.choiceText, this.style.radioChoiceText]}>{choice.text}</Text>
+                    <Text style={[{ paddingHorizontal: 10 }, this.style.choiceText, this.style.radioChoiceText]}>{choice.text}</Text>
                 </TouchableOpacity>
             )
         })
@@ -57,6 +57,5 @@ const styles = StyleSheet.create({
         height: 16,
         overflow: 'hidden',
         padding: 2,
-        marginRight: 10,
     },
 })
