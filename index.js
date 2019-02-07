@@ -55,9 +55,7 @@ export default class GravityForm extends Component {
                     fieldCount = fieldCount + field.inputs.length - 1
                     field.inputs.forEach(input => {
                         if (input.choices) {
-                            const selected = input.choices.filter(choice => {
-                                return choice.isSelected
-                            })
+                            const selected = input.choices.filter(choice => choice.isSelected)
                             values = {
                                 ...values,
                                 [input.id]: selected.length ? selected[0].value : '',
@@ -77,6 +75,14 @@ export default class GravityForm extends Component {
                             }
                         }
                     })
+                } else if (field.choices) {
+                    const selected = field.choices.filter(choice => {
+                        return choice.isSelected
+                    })
+                    values = {
+                        ...values,
+                        [field.id]: selected.length ? selected[0].value : '',
+                    }
                 } else {
                     values = { ...values, [field.id]: field.defaultValue }
                 }
