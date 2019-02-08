@@ -5,7 +5,7 @@ import HTML from 'react-native-render-html'
 export default class HtmlField extends Component {
     constructor(props) {
         super(props)
-        this.data = this.props.data;
+        this.data = this.props.data
         this.style = this.props.style
     }
 

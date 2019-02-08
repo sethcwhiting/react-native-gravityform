@@ -4,7 +4,7 @@ import { View, Text, StyleSheet } from 'react-native'
 export default class SectionField extends Component {
     constructor(props) {
         super(props)
-        this.data = this.props.data;
+        this.data = this.props.data
         this.style = this.props.style
     }
 
