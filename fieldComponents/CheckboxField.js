@@ -20,13 +20,13 @@ export default class CheckboxField extends Component {
                 <TouchableOpacity
                     style={[{ flexDirection: 'row', marginBottom: 15 }, this.style.choiceWrapper, this.style.checkboxChoiceWrapper]}
                     key={index.toString()}
-                    onPress={() => this.handleChange(this.data.id, !this.props.value[input.id], input.id)}
+                    onPress={() => this.handleChange(this.data.id, this.props.value[input.id] == this.data.choices[index].value ? false : this.data.choices[index].value, input.id)}
                 >
                     <View style={[styles.buttonWrapper, this.style.checkboxButtonWrapper]}>
                         <View style={[
                             this.style.checkboxButton,
-                            this.props.value[input.id] ? styles.selectedButton : null,
-                            this.props.value[input.id] ? this.style.selectedCheckboxButton : null
+                            this.props.value[input.id] == this.data.choices[index].value ? styles.selectedButton : null,
+                            this.props.value[input.id] == this.data.choices[index].value ? this.style.selectedCheckboxButton : null
                         ]} />
                     </View>
                     <View style={[{ paddingHorizontal: 10 }, this.style.choiceTextWrapper, this.style.checkboxChoiceTextWrapper]}>

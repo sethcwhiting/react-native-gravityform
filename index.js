@@ -22,7 +22,9 @@ export default class GravityForm extends Component {
         super(props)
         this.siteURL = this.props.siteURL
         this.formID = this.props.formID
-        this.credentials = this.props.credentials
+        const credentials = this.props.credentials
+        const credentialString = `${credentials.userName}:${credentials.password}`
+        this.encodedCredentials = base64.encode(credentialString)
         this.style = this.props.style
         this.state = {
             formData: {},
@@ -44,14 +46,12 @@ export default class GravityForm extends Component {
 
     fetchFormData() {
         return new Promise((resolve, reject) => {
-            const credentialString = `${this.credentials.userName}:${this.credentials.password}`
-            const encodedCredentials = base64.encode(credentialString)
             fetch(`${this.siteURL}/wp-json/gf/v2/forms/${this.formID}`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
-                    'Authorization': `Basic ${encodedCredentials}`,
+                    'Authorization': `Basic ${this.encodedCredentials}`,
                 }
             })
                 .then(response => response.json().then(formData => resolve(formData)))
@@ -64,6 +64,10 @@ export default class GravityForm extends Component {
             let values = {}
             let fieldCount = formData.fields.length
             formData.fields.forEach(field => {
+                if (field.type == 'html' || field.type == 'section') {
+                    fieldCount--
+                    return
+                }
                 // NameField, AddressField, CheckboxField
                 if (field.inputs) {
                     fieldCount = fieldCount + field.inputs.length
@@ -72,14 +76,14 @@ export default class GravityForm extends Component {
                         field.inputs.forEach((input, index) => {
                             values = {
                                 ...values,
-                                [input.id]: field.choices[index].isSelected ? true : false,
+                                [input.id]: field.choices[index].isSelected ? field.choices[index].value : false,
                                 [field.id]: {
                                     ...values[field.id],
-                                    [input.id]: field.choices[index].isSelected ? true : false,
+                                    [input.id]: field.choices[index].isSelected ? field.choices[index].value : false,
                                 },
                             }
                         })
-                    // NameField, AddressField
+                        // NameField, AddressField
                     } else {
                         field.inputs.forEach(input => {
                             if (input.choices) {
@@ -143,6 +147,34 @@ export default class GravityForm extends Component {
         }
     }
 
+    submitForm() {
+        let formData = {}
+        let fieldCount = Object.keys(this.state.fieldValues).length
+        Object.keys(this.state.fieldValues).forEach(key => {
+            if (typeof this.state.fieldValues[key] == 'object' && this.state.fieldValues[key] !== null) {
+                fieldCount--
+            } else {
+                formData = { ...formData, [key]: this.state.fieldValues[key] }
+            }
+            console.log(Object.keys(formData).length, fieldCount);
+            if (Object.keys(formData).length == fieldCount) this.postFormData(formData)
+        })
+    }
+
+    postFormData(formData) {
+        fetch(`${this.siteURL}/wp-json/gf/v2/forms/${this.formID}/entries`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Basic ${this.encodedCredentials}`,
+            },
+            body: JSON.stringify(formData),
+        })
+            .then((res) => console.log('res: ', res))
+            .catch(err => console.error('ERROR: ', err));
+    }
+
     fieldComponents = {
         address: AddressField,
         checkbox: CheckboxField,
@@ -190,7 +222,7 @@ export default class GravityForm extends Component {
                 {fields}
                 {this.state.formData.button &&
                     <View style={this.style.formFooter}>
-                        <TouchableOpacity onPress={() => alert('button pressed')} style={this.style.button}>
+                        <TouchableOpacity onPress={() => this.submitForm()} style={this.style.button}>
                             <Text style={this.style.buttonText}>{this.state.formData.button.text}</Text>
                         </TouchableOpacity>
                     </View>
