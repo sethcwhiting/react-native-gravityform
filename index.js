@@ -2,7 +2,20 @@ import React, { Component } from 'react'
 import { ScrollView, View, Text, TouchableOpacity } from 'react-native'
 // import ValidationComponent from 'react-native-form-validator'
 import base64 from 'react-native-base64'
-import { HiddenField, HtmlField, CheckboxField, SectionField, NameField, PhoneField, EmailField, TextField, AddressField, SelectField, RadioField, NumberField } from './fieldComponents'
+import {
+    AddressField,
+    CheckboxField,
+    EmailField,
+    HiddenField,
+    HtmlField,
+    NameField,
+    NumberField,
+    PhoneField,
+    RadioField,
+    SectionField,
+    SelectField,
+    TextField,
+} from './fieldComponents'
 
 export default class GravityForm extends Component {
     constructor(props) {
@@ -51,30 +64,47 @@ export default class GravityForm extends Component {
             let values = {}
             let fieldCount = formData.fields.length
             formData.fields.forEach(field => {
+                // NameField, AddressField, CheckboxField
                 if (field.inputs) {
-                    fieldCount = fieldCount + field.inputs.length - 1
-                    field.inputs.forEach(input => {
-                        if (input.choices) {
-                            const selected = input.choices.filter(choice => choice.isSelected)
+                    fieldCount = fieldCount + field.inputs.length
+                    // CheckboxField
+                    if (field.choices) {
+                        field.inputs.forEach((input, index) => {
                             values = {
                                 ...values,
-                                [input.id]: selected.length ? selected[0].value : '',
+                                [input.id]: field.choices[index].isSelected ? true : false,
                                 [field.id]: {
                                     ...values[field.id],
-                                    [input.id]: selected[0] ? selected[0].value : ''
+                                    [input.id]: field.choices[index].isSelected ? true : false,
                                 },
                             }
-                        } else {
-                            values = {
-                                ...values,
-                                [input.id]: input.defaultValue ? input.defaultValue : '',
-                                [field.id]: {
-                                    ...values[field.id],
-                                    [input.id]: input.defaultValue ? input.defaultValue : ''
-                                },
+                        })
+                    // NameField, AddressField
+                    } else {
+                        field.inputs.forEach(input => {
+                            if (input.choices) {
+                                const selected = input.choices.filter(choice => choice.isSelected)
+                                values = {
+                                    ...values,
+                                    [input.id]: selected.length ? selected[0].value : '',
+                                    [field.id]: {
+                                        ...values[field.id],
+                                        [input.id]: selected[0] ? selected[0].value : ''
+                                    },
+                                }
+                            } else {
+                                values = {
+                                    ...values,
+                                    [input.id]: input.defaultValue ? input.defaultValue : '',
+                                    [field.id]: {
+                                        ...values[field.id],
+                                        [input.id]: input.defaultValue ? input.defaultValue : ''
+                                    },
+                                }
                             }
-                        }
-                    })
+                        })
+                    }
+                    // RadioField
                 } else if (field.choices) {
                     const selected = field.choices.filter(choice => {
                         return choice.isSelected
@@ -114,18 +144,18 @@ export default class GravityForm extends Component {
     }
 
     fieldComponents = {
+        address: AddressField,
+        checkbox: CheckboxField,
+        email: EmailField,
         hidden: HiddenField,
         html: HtmlField,
-        checkbox: CheckboxField,
-        section: SectionField,
         name: NameField,
-        phone: PhoneField,
-        email: EmailField,
-        text: TextField,
-        address: AddressField,
-        select: SelectField,
-        radio: RadioField,
         number: NumberField,
+        phone: PhoneField,
+        radio: RadioField,
+        section: SectionField,
+        select: SelectField,
+        text: TextField,
     }
 
     render() {
