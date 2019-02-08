@@ -46,8 +46,12 @@ export default class AddressField extends Component {
         })
         return (
             <View style={[this.style.fieldWrapper, this.style.addressFieldWrapper]}>
-                <Text style={[this.style.fieldLabel, this.style.addressFieldLabel]}>{this.data.label}</Text>
-                <Text style={[this.style.fieldDescription, this.style.addressFieldDescription]}>{this.data.description}</Text>
+                {this.data.label.length > 0 &&
+                    <Text style={[this.style.fieldLabel, this.style.addressFieldLabel]}>{this.data.label}</Text>
+                }
+                {this.data.description.length > 0 &&
+                    <Text style={[this.style.fieldDescription, this.style.addressFieldDescription]}>{this.data.description}</Text>
+                }
                 {inputs}
             </View>
         )

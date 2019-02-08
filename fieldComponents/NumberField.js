@@ -16,8 +16,12 @@ export default class NumberField extends Component {
     render() {
         return (
             <View style={[this.style.fieldWrapper, this.style.numberFieldWrapper]}>
-                <Text style={[this.style.fieldLabel, this.style.numberFieldLabel]}>{this.data.label}</Text>
-                <Text style={[this.style.fieldDescription, this.style.numberFieldDescription]}>{this.data.description}</Text>
+                {this.data.label.length > 0 &&
+                    <Text style={[this.style.fieldLabel, this.style.numberFieldLabel]}>{this.data.label}</Text>
+                }
+                {this.data.description.length > 0 &&
+                    <Text style={[this.style.fieldDescription, this.style.numberFieldDescription]}>{this.data.description}</Text>
+                }
                 <TextInput
                     style={[this.style.fieldInput, this.style.numberFieldInput]}
                     onChangeText={(text) => this.handleChange(text)}

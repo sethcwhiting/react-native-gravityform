@@ -19,8 +19,12 @@ export default class SelectField extends Component {
         })
         return (
             <View style={[this.style.fieldWrapper, this.style.selectFieldWrapper]}>
-                <Text style={[this.style.fieldLabel, this.style.selectFieldLabel]}>{this.data.label}</Text>
-                <Text style={[this.style.fieldDescription, this.style.selectFieldDescription]}>{this.data.description}</Text>
+                {this.data.label.length > 0 &&
+                    <Text style={[this.style.fieldLabel, this.style.selectFieldLabel]}>{this.data.label}</Text>
+                }
+                {this.data.description.length > 0 &&
+                    <Text style={[this.style.fieldDescription, this.style.selectFieldDescription]}>{this.data.description}</Text>
+                }
                 <Picker
                     selectedValue={this.props.value}
                     onValueChange={(value) => this.handleChange(this.data.id, value)}

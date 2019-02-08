@@ -16,8 +16,12 @@ export default class HiddenField extends Component {
     render() {
         return (
             <View style={[this.style.fieldWrapper, { display: 'none' }, this.style.hiddenFieldWrapper]}>
-                <Text style={[this.style.fieldLabel, this.style.hiddenFieldLabel]}>{this.data.label}</Text>
-                <Text style={[this.style.fieldDescription, this.style.hiddenFieldDescription]}>{this.data.description}</Text>
+                {this.data.label.length > 0 &&
+                    <Text style={[this.style.fieldLabel, this.style.hiddenFieldLabel]}>{this.data.label}</Text>
+                }
+                {this.data.description.length > 0 &&
+                    <Text style={[this.style.fieldDescription, this.style.hiddenFieldDescription]}>{this.data.description}</Text>
+                }
                 <TextInput
                     style={[this.style.fieldInput, this.style.hiddenFieldInput]}
                     onChangeText={(number) => this.handleChange(number)}

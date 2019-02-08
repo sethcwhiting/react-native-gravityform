@@ -182,7 +182,7 @@ export default class GravityForm extends Component {
         })
         return (
             <ScrollView style={this.style.formWrapper}>
-                {this.state.formData.title && this.state.formData.title.length && !this.props.hideTitle &&
+                {this.state.formData.title.length > 0 && !this.props.hideFormTitle &&
                     <View style={this.style.formHeader}>
                         <Text style={this.style.formTitle}>{this.state.formData.title}</Text>
                     </View>

@@ -16,8 +16,12 @@ export default class EmailField extends Component {
     render() {
         return (
             <View style={[this.style.fieldWrapper, this.style.textFieldWrapper]}>
-                <Text style={[this.style.fieldLabel, this.style.textFieldLabel]}>{this.data.label}</Text>
-                <Text style={[this.style.fieldDescription, this.style.textFieldDescription]}>{this.data.description}</Text>
+                {this.data.label.length > 0 &&
+                    <Text style={[this.style.fieldLabel, this.style.emailFieldLabel]}>{this.data.label}</Text>
+                }
+                {this.data.description.length > 0 &&
+                    <Text style={[this.style.fieldDescription, this.style.emailFieldDescription]}>{this.data.description}</Text>
+                }
                 <TextInput
                     style={[this.style.fieldInput, this.style.textFieldInput]}
                     onChangeText={(text) => this.handleChange(text)}

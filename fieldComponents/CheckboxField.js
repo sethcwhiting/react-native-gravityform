@@ -26,7 +26,7 @@ export default class CheckboxField extends Component {
                         <View style={[
                             this.style.checkboxButton,
                             this.props.value[input.id] ? styles.selectedButton : null,
-                            this.props.value[input.id] ? this.style.selectedcheckboxButton : null
+                            this.props.value[input.id] ? this.style.selectedCheckboxButton : null
                         ]} />
                     </View>
                     <View style={[{ paddingHorizontal: 10 }, this.style.choiceTextWrapper, this.style.checkboxChoiceTextWrapper]}>
@@ -37,8 +37,12 @@ export default class CheckboxField extends Component {
         })
         return (
             <View style={[this.style.fieldWrapper, this.style.checkboxFieldWrapper]}>
-                <Text style={[this.style.fieldLabel, this.style.checkboxFieldLabel]}>{this.data.label}</Text>
-                <Text style={[this.style.fieldDescription, this.style.checkboxFieldDescription]}>{this.data.description}</Text>
+                {this.data.label.length > 0 &&
+                    <Text style={[this.style.fieldLabel, this.style.checkboxFieldLabel]}>{this.data.label}</Text>
+                }
+                {this.data.description.length > 0 &&
+                    <Text style={[this.style.fieldDescription, this.style.checkboxFieldDescription]}>{this.data.description}</Text>
+                }
                 {inputs}
             </View>
         )

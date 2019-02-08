@@ -16,8 +16,12 @@ export default class PhoneField extends Component {
     render() {
         return (
             <View style={[this.style.fieldWrapper, this.style.phoneFieldWrapper]}>
-                <Text style={[this.style.fieldLabel, this.style.phoneFieldLabel]}>{this.data.label}</Text>
-                <Text style={[this.style.fieldDescription, this.style.phoneFieldDescription]}>{this.data.description}</Text>
+                {this.data.label.length > 0 &&
+                    <Text style={[this.style.fieldLabel, this.style.phoneFieldLabel]}>{this.data.label}</Text>
+                }
+                {this.data.description.length > 0 &&
+                    <Text style={[this.style.fieldDescription, this.style.phoneFieldDescription]}>{this.data.description}</Text>
+                }
                 <TextInput
                     style={[this.style.fieldInput, this.style.phoneFieldInput]}
                     onChangeText={(number) => this.handleChange(number)}

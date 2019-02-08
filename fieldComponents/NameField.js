@@ -46,8 +46,12 @@ export default class NameField extends Component {
         })
         return (
             <View style={[this.style.fieldWrapper, this.style.nameFieldWrapper]}>
-                <Text style={[this.style.fieldLabel, this.style.nameFieldLabel]}>{this.data.label}</Text>
-                <Text style={[this.style.fieldDescription, this.style.nameFieldDescription]}>{this.data.description}</Text>
+                {this.data.label.length > 0 &&
+                    <Text style={[this.style.fieldLabel, this.style.nameFieldLabel]}>{this.data.label}</Text>
+                }
+                {this.data.description.length > 0 &&
+                    <Text style={[this.style.fieldDescription, this.style.nameFieldDescription]}>{this.data.description}</Text>
+                }
                 {inputs}
             </View>
         )

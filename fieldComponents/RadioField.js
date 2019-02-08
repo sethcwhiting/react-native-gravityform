@@ -34,8 +34,12 @@ export default class RadioField extends Component {
         })
         return (
             <View style={[this.style.fieldWrapper, this.style.radioFieldWrapper]}>
-                <Text style={[this.style.fieldLabel, this.style.radioFieldLabel]}>{this.data.label}</Text>
-                <Text style={[this.style.fieldDescription, this.style.radioFieldDescription]}>{this.data.description}</Text>
+                {this.data.label.length > 0 &&
+                    <Text style={[this.style.fieldLabel, this.style.radioFieldLabel]}>{this.data.label}</Text>
+                }
+                {this.data.description.length > 0 &&
+                    <Text style={[this.style.fieldDescription, this.style.radioFieldDescription]}>{this.data.description}</Text>
+                }
                 {choices}
             </View>
         )
