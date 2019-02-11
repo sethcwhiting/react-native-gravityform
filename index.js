@@ -30,6 +30,9 @@ export default class GravityForm extends Component {
             formData: {},
             fieldValues: {},
             isLoading: true,
+            isSending: false,
+            submitSuccess: false,
+            submitFailure: false,
         }
         this.handleFieldChange = this.handleFieldChange.bind(this)
     }
@@ -148,6 +151,7 @@ export default class GravityForm extends Component {
     }
 
     submitForm() {
+        this.setState({ isSending: true })
         let formData = {}
         let fieldCount = Object.keys(this.state.fieldValues).length
         Object.keys(this.state.fieldValues).forEach(key => {
@@ -156,7 +160,6 @@ export default class GravityForm extends Component {
             } else {
                 formData = { ...formData, [key]: this.state.fieldValues[key] }
             }
-            console.log(Object.keys(formData).length, fieldCount);
             if (Object.keys(formData).length == fieldCount) this.postFormData(formData)
         })
     }
@@ -171,7 +174,7 @@ export default class GravityForm extends Component {
             },
             body: JSON.stringify(formData),
         })
-            .then((res) => console.log('res: ', res))
+            .then(() => this.setState({ isSending: false }))
             .catch(err => console.error('ERROR: ', err));
     }
 
@@ -195,6 +198,13 @@ export default class GravityForm extends Component {
             return (
                 <View style={{ flex: 1, backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center' }}>
                     <Text>Fetching Gravity Form...</Text>
+                </View>
+            )
+        }
+        if (this.state.isSending) {
+            return (
+                <View style={{ flex: 1, backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center' }}>
+                    <Text>Submitting Form...</Text>
                 </View>
             )
         }
