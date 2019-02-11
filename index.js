@@ -62,6 +62,7 @@ export default class GravityForm extends Component {
         })
     }
 
+    // TODO: Chunk this out.
     setDefaultValues(formData) {
         return new Promise((resolve) => {
             let values = {}
@@ -126,6 +127,56 @@ export default class GravityForm extends Component {
                 if (Object.keys(values).length == fieldCount) resolve(values)
             })
         })
+    }
+
+    fieldHidden(field) {
+        if (field.visibility != 'visible') return true
+        if (typeof field.conditionalLogic == 'object' && field.conditionalLogic !== null) {
+            const rulesMet = field.conditionalLogic.rules.map(rule => {
+                let conditionalValue = this.state.fieldValues[rule.fieldId]
+                if (typeof conditionalValue == 'object') {
+                    matchKey = Object.keys(conditionalValue).filter(key => this.state.fieldValues[key] == rule.value)[0]
+                    conditionalValue = matchKey ? this.state.fieldValues[matchKey] : false
+                }
+                switch (rule.operator) {
+                    case 'is':
+                        return conditionalValue == rule.value
+                        
+                    case 'is not':
+                        return conditionalValue != rule.value
+
+                    case 'greater than':
+                        return conditionalValue > rule.value
+
+                    case 'less than':
+                        return conditionalValue < rule.value
+
+                    case 'contains':
+                        return conditionalValue.indexOf(rule.value) >= 0
+
+                    case 'starts with':
+                        return conditionalValue.indexOf(rule.value) == 0
+
+                    case 'ends with':
+                        return conditionalValue.indexOf(rule.value) == conditionalValue.length - rule.value.length
+
+                }
+            })
+            if (field.conditionalLogic.actionType == 'show') {
+                if (field.conditionalLogic.logicType == 'all') {
+                    return rulesMet.indexOf(false) >= 0
+                } else {
+                    return rulesMet.indexOf(true) < 0
+                }
+            } else {
+                if (field.conditionalLogic.logicType == 'all') {
+                    return rulesMet.indexOf(true) < 0
+                } else {
+                    return rulesMet.indexOf(false) >= 0
+                }
+            }
+        }
+        return false
     }
 
     handleFieldChange(fieldId, value, inputId) {
@@ -208,19 +259,27 @@ export default class GravityForm extends Component {
                 </View>
             )
         }
+        let parentHidden = false
         const fields = this.state.formData.fields && this.state.formData.fields.map((field) => {
             if (Object.keys(this.fieldComponents).indexOf(field.type) < 0) {
                 console.warn(`React Native Gravityform: No field component currently available for type "${field.type}".`)
                 return
             }
             const FieldComponent = this.fieldComponents[field.type || 'text']
-            return <FieldComponent
-                key={field.id.toString()}
-                data={field}
-                onChange={this.handleFieldChange}
-                style={this.style}
-                value={this.state.fieldValues[field.id]}
-            />
+            if (field.type == 'section') parentHidden = this.fieldHidden(field)
+            return (
+                <View
+                    key={field.id.toString()}
+                    style={{ display: this.fieldHidden(field) || parentHidden ? 'none' : 'flex' }}
+                >
+                    <FieldComponent
+                        data={field}
+                        onChange={this.handleFieldChange}
+                        style={this.style}
+                        value={this.state.fieldValues[field.id]}
+                    />
+                </View>
+            )
         })
         return (
             <ScrollView style={this.style.formWrapper}>
