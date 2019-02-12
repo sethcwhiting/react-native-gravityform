@@ -43,7 +43,7 @@ export default class GravityForm extends Component {
                 this.setState({ formData })
                 return this.setDefaultValues(formData)
             })
-            .then(values => this.setState({ fieldValues: values, isLoading: false }))
+            .then(() => this.setState({ isLoading: false }))
             .catch(err => console.warn('There was a problem retrieving form data: ', err))
     }
 
@@ -62,121 +62,144 @@ export default class GravityForm extends Component {
         })
     }
 
-    // TODO: Chunk this out.
+    values = {}
+
     setDefaultValues(formData) {
-        return new Promise((resolve) => {
-            let values = {}
+        return new Promise((resolve, reject) => {
             let fieldCount = formData.fields.length
             formData.fields.forEach(field => {
-                if (field.type == 'html' || field.type == 'section') {
-                    fieldCount--
-                    return
+                switch (field.type) {
+                    case 'html':
+                    case 'section':
+                        fieldCount--
+                        break
+
+                    case 'name':
+                    case 'address':
+                        fieldCount = fieldCount + field.inputs.length
+                        this.populateComplexValues(field)
+                        break
+
+                    case 'checkbox':
+                        fieldCount = fieldCount + field.inputs.length
+                        this.populateCheckboxValues(field)
+                        break
+
+                    case 'radio':
+                    case 'select':
+                        this.populateChoiceValues(field)
+                        break
+
+                    default:
+                        if (field.id == '36') console.log(field)
+                        this.populateSimpleValue(field)
+                        break
                 }
-                // NameField, AddressField, CheckboxField
-                if (field.inputs) {
-                    fieldCount = fieldCount + field.inputs.length
-                    // CheckboxField
-                    if (field.choices) {
-                        field.inputs.forEach((input, index) => {
-                            values = {
-                                ...values,
-                                [input.id]: field.choices[index].isSelected ? field.choices[index].value : false,
-                                [field.id]: {
-                                    ...values[field.id],
-                                    [input.id]: field.choices[index].isSelected ? field.choices[index].value : false,
-                                },
-                            }
-                        })
-                        // NameField, AddressField
-                    } else {
-                        field.inputs.forEach(input => {
-                            if (input.choices) {
-                                const selected = input.choices.filter(choice => choice.isSelected)
-                                values = {
-                                    ...values,
-                                    [input.id]: selected.length ? selected[0].value : '',
-                                    [field.id]: {
-                                        ...values[field.id],
-                                        [input.id]: selected[0] ? selected[0].value : ''
-                                    },
-                                }
-                            } else {
-                                values = {
-                                    ...values,
-                                    [input.id]: input.defaultValue ? input.defaultValue : '',
-                                    [field.id]: {
-                                        ...values[field.id],
-                                        [input.id]: input.defaultValue ? input.defaultValue : ''
-                                    },
-                                }
-                            }
-                        })
+            })
+            if (Object.keys(this.state.fieldValues).length == fieldCount) resolve()
+            setTimeout(() => reject('"setDefaultValues" function timed out. Field values never populated completely.'), 5000)
+        })
+    }
+
+    populateComplexValues(field) {
+        field.inputs.forEach(input => {
+            if (input.choices) {
+                const selected = input.choices.filter(choice => choice.isSelected)
+                this.setState({
+                    fieldValues: {
+                        ...this.state.fieldValues,
+                        [input.id]: selected.length ? selected[0].value : '',
+                        [field.id]: {
+                            ...this.state.fieldValues[field.id],
+                            [input.id]: selected[0] ? selected[0].value : ''
+                        }
                     }
-                    // RadioField
-                } else if (field.choices) {
-                    const selected = field.choices.filter(choice => {
-                        return choice.isSelected
-                    })
-                    values = {
-                        ...values,
-                        [field.id]: selected.length ? selected[0].value : '',
+                })
+            } else {
+                this.setState({
+                    fieldValues: {
+                        ...this.state.fieldValues,
+                        [input.id]: input.defaultValue ? input.defaultValue : '',
+                        [field.id]: {
+                            ...this.state.fieldValues[field.id],
+                            [input.id]: input.defaultValue ? input.defaultValue : ''
+                        }
                     }
-                } else {
-                    values = { ...values, [field.id]: field.defaultValue }
+                })
+            }
+        })
+    }
+
+    populateCheckboxValues(field) {
+        field.inputs.forEach((input, index) => {
+            this.setState({
+                fieldValues: {
+                    ...this.state.fieldValues,
+                    [input.id]: field.choices[index].isSelected ? field.choices[index].value : false,
+                    [field.id]: {
+                        ...this.state.fieldValues[field.id],
+                        [input.id]: field.choices[index].isSelected ? field.choices[index].value : false,
+                    }
                 }
-                if (Object.keys(values).length == fieldCount) resolve(values)
             })
         })
+    }
+
+    populateChoiceValues(field) {
+        const selected = field.choices.filter(choice => {
+            return choice.isSelected
+        })
+        this.setState({ fieldValues: { ...this.state.fieldValues, [field.id]: selected.length ? selected[0].value : '' } })
+    }
+
+    populateSimpleValue(field) {
+        this.setState({ fieldValues: { ...this.state.fieldValues, [field.id]: field.defaultValue } })
     }
 
     fieldHidden(field) {
         if (field.visibility != 'visible') return true
         if (typeof field.conditionalLogic == 'object' && field.conditionalLogic !== null) {
-            const rulesMet = field.conditionalLogic.rules.map(rule => {
-                let conditionalValue = this.state.fieldValues[rule.fieldId]
-                if (typeof conditionalValue == 'object') {
-                    matchKey = Object.keys(conditionalValue).filter(key => this.state.fieldValues[key] == rule.value)[0]
-                    conditionalValue = matchKey ? this.state.fieldValues[matchKey] : false
-                }
-                switch (rule.operator) {
-                    case 'is':
-                        return conditionalValue == rule.value
-                        
-                    case 'is not':
-                        return conditionalValue != rule.value
-
-                    case 'greater than':
-                        return conditionalValue > rule.value
-
-                    case 'less than':
-                        return conditionalValue < rule.value
-
-                    case 'contains':
-                        return conditionalValue.indexOf(rule.value) >= 0
-
-                    case 'starts with':
-                        return conditionalValue.indexOf(rule.value) == 0
-
-                    case 'ends with':
-                        return conditionalValue.indexOf(rule.value) == conditionalValue.length - rule.value.length
-
-                }
-            })
-            if (field.conditionalLogic.actionType == 'show') {
-                if (field.conditionalLogic.logicType == 'all') {
-                    return rulesMet.indexOf(false) >= 0
-                } else {
-                    return rulesMet.indexOf(true) < 0
-                }
-            } else {
-                if (field.conditionalLogic.logicType == 'all') {
-                    return rulesMet.indexOf(true) < 0
-                } else {
-                    return rulesMet.indexOf(false) >= 0
-                }
-            }
+            return this.handleConditionalLogic(field)
         }
         return false
+    }
+
+    handleConditionalLogic(field) {
+        const rulesMet = field.conditionalLogic.rules.map(rule => {
+            let conditionalValue = this.state.fieldValues[rule.fieldId]
+            if (typeof conditionalValue == 'object') {
+                matchKey = Object.keys(conditionalValue).filter(key => this.state.fieldValues[key] == rule.value)[0]
+                conditionalValue = matchKey ? this.state.fieldValues[matchKey] : false
+            }
+            switch (rule.operator) {
+                case 'is':
+                    return conditionalValue == rule.value
+
+                case 'is not':
+                    return conditionalValue != rule.value
+
+                case 'greater than':
+                    return conditionalValue > rule.value
+
+                case 'less than':
+                    return conditionalValue < rule.value
+
+                case 'contains':
+                    return conditionalValue.indexOf(rule.value) >= 0
+
+                case 'starts with':
+                    return conditionalValue.indexOf(rule.value) == 0
+
+                case 'ends with':
+                    return conditionalValue.indexOf(rule.value) == conditionalValue.length - rule.value.length
+
+            }
+        })
+        if (field.conditionalLogic.actionType == 'show') {
+            return field.conditionalLogic.logicType == 'all' ? rulesMet.indexOf(false) >= 0 : rulesMet.indexOf(true) < 0
+        } else {
+            return field.conditionalLogic.logicType == 'all' ? rulesMet.indexOf(true) < 0 : rulesMet.indexOf(false) >= 0
+        }
     }
 
     handleFieldChange(fieldId, value, inputId) {
