@@ -39,7 +39,7 @@ Once your `credentials.js` file is all set, you can import it into any file:
 import credentials from '...path_to/credentials';
 ```
 
-### The GravityForm Component
+### ✨ The GravityForm Component ✨
 
 Import the GravityForm component:
 
