@@ -91,7 +91,7 @@ const gformStyles = StyleSheet.create({
 });
 ```
 
-**A list of all of the built in element names** that you can reference in your stylesheet can be found **[here](https://github.com/sethcwhiting/react-native-gravityform/blob/master/elementNames.md).**
+[View all built in element names](https://github.com/sethcwhiting/react-native-gravityform/blob/master/elementNames.md).\*\*
 
 ### hideFormTitle
 
