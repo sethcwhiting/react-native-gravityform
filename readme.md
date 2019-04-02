@@ -77,7 +77,7 @@ The credentials you imported from the file you created in the [Authentication](#
 
 Out of the box, the GravityForm component is almost entirely unstyled, so you'll probably want to write your own styles for your fields.
 
-This can be done by including a new StyleSheet and referencing the built-in element names, like so:
+This can be done by including a new StyleSheet and referencing the _built-in element names_ ([see full list](https://github.com/sethcwhiting/react-native-gravityform/blob/master/elementNames.md)), like so:
 
 ```javascript
 const gformStyles = StyleSheet.create({
@@ -90,8 +90,6 @@ const gformStyles = StyleSheet.create({
     },
 });
 ```
-
-[View all built in element names](https://github.com/sethcwhiting/react-native-gravityform/blob/master/elementNames.md)
 
 ### hideFormTitle
 
