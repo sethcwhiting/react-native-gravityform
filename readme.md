@@ -320,7 +320,13 @@ export default class ContactScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <GravityForm siteURL="https://www.your-wordpress-site.com" formID="3" credentials={credentials} style={gformStyles} hideFormTitle={true} />
+                <GravityForm
+                    siteURL="https://www.your-wordpress-site.com"
+                    formID="3"
+                    credentials={credentials}
+                    style={gformStyles}
+                    hideFormTitle={true}
+                />
             </View>
         );
     }
