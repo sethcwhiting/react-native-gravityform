@@ -34,12 +34,18 @@ export default {
 It may be a good idea to make a new Wordpress user with read/write permissions for the sole purpose of posting to your Gravity Forms and include that new user's information to the file above. Also, MAKE SURE TO INCLUDE THIS FILE IN YOUR `.gitignore` SO NO ONE EVER SEES THIS INFORMATION.
 
 Once your `Credentials.js` file is all set, you can import it into any file:
-`import credentials from '...path_to/Credentials';`
+
+```javascript
+import credentials from '...path_to/Credentials';
+```
 
 ### The GravityForm Component
 
 Import the GravityForm component:
-`import GravityForm from 'react-native-gravityform';`
+
+```javascript
+import GravityForm from 'react-native-gravityform';
+```
 
 Include the component anywhere inside your own components:
 
