@@ -82,7 +82,7 @@ This can be done by including a new StyleSheet and referencing the _built-in ele
 ```javascript
 const gformStyles = StyleSheet.create({
     fieldInput: {
-        color: '#333',
+        color: '#224',
         backgroundColor: '#eee',
         padding: 15,
         marginBottom: 15,
@@ -121,51 +121,12 @@ const gformStyles = StyleSheet.create({
         fontSize: 16,
         color: '#224',
     },
-    fieldSubLabel: {
-        fontSize: 16,
-        color: '#224',
-        textAlign: 'right',
-        marginBottom: 15,
-        marginTop: -10,
-    },
-    fieldDescription: {
-        fontSize: 14,
-        color: '#224',
-        marginBottom: 10,
-    },
-    fieldWrapper: {
-        padding: 10,
-    },
     fieldInput: {
         color: '#224',
         backgroundColor: '#eee',
         padding: 15,
         marginBottom: 15,
-        borderRadius: 15,
         fontSize: 18,
-        minHeight: 52,
-    },
-    fieldSelectText: {
-        color: '#224',
-        fontSize: 18,
-    },
-    fieldSelectArrow: {
-        borderTopColor: '#224',
-    },
-    radioButtonWrapper: {
-        borderColor: '#1c9',
-    },
-    selectedRadioButton: {
-        backgroundColor: '#1c9',
-    },
-    checkboxButtonWrapper: {
-        borderColor: '#1c9',
-    },
-    selectedCheckboxButton: {
-        backgroundColor: '#1c9',
-    },
-    formFooter: {
-        padding: 10,
     },
     button: {
         backgroundColor: '#1c9',
