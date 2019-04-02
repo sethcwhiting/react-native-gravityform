@@ -31,7 +31,7 @@ export default {
 };
 ```
 
-It may be a good idea to make a new Wordpress user with read/write permissions for the sole purpose of posting to your Gravity Forms and include that new user's information to the file above. Also, MAKE SURE TO INCLUDE THIS FILE IN YOUR `.gitignore` SO NO ONE EVER SEES THIS INFORMATION.
+It may be a good idea to make a new Wordpress user with read/write permissions for the sole purpose of posting to your Gravity Forms and include that new user's information to the file above. Also, **make sure to include this file in your `.gitignore` so no one ever sees this information.**
 
 Once your `credentials.js` file is all set, you can import it into any file:
 
@@ -339,7 +339,7 @@ The goal for this component is to support all [Standard](https://docs.gravityfor
 
 The list of the fields currently supported by the GravityForm component are marked with a check mark below:
 
-Standard:
+**Standard:**
 
 -   [x] Single Line Text
 -   [ ] Paragraph Text
@@ -353,7 +353,7 @@ Standard:
 -   [x] Section Break
 -   [ ] Page Break
 
-Advanced:
+**Advanced:**
 
 -   [x] Name
 -   [ ] Date
