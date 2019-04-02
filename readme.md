@@ -22,7 +22,7 @@ The solution is implemented in JavaScript so no native module linking is require
 
 Gravity Forms requires that API requests be authenticated. In order to get this working, install Wordpress's [JSON Basic Authentication](https://github.com/WP-API/Basic-Auth) plugin.
 
-Once you've done this, make a file named something to the effect of `Credentials.js` and add it anywhere in your project. The entire contents of this file should look something like this:
+Once you've done this, make a file named something to the effect of `credentials.js` and add it anywhere in your project. The entire contents of this file should look something like this:
 
 ```javascript
 export default {
@@ -33,10 +33,10 @@ export default {
 
 It may be a good idea to make a new Wordpress user with read/write permissions for the sole purpose of posting to your Gravity Forms and include that new user's information to the file above. Also, MAKE SURE TO INCLUDE THIS FILE IN YOUR `.gitignore` SO NO ONE EVER SEES THIS INFORMATION.
 
-Once your `Credentials.js` file is all set, you can import it into any file:
+Once your `credentials.js` file is all set, you can import it into any file:
 
 ```javascript
-import credentials from '...path_to/Credentials';
+import credentials from '...path_to/credentials';
 ```
 
 ### The GravityForm Component
