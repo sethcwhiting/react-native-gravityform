@@ -113,9 +113,6 @@ const styles = StyleSheet.create({
 });
 
 const gformStyles = StyleSheet.create({
-    headerRow: {
-        borderBottomColor: '#224',
-    },
     fieldLabel: {
         fontWeight: 'bold',
         fontSize: 16,
