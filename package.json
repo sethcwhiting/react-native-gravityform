@@ -1,6 +1,6 @@
 {
   "name": "react-native-gravityform",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "A component for including Gravity Forms on React Native apps via the Wordpress API",
   "main": "index.js",
   "scripts": {
