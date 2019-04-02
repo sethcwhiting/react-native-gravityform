@@ -2,7 +2,7 @@
 
 [![Version](https://img.shields.io/npm/v/react-native-gravityform.svg)](https://www.npmjs.com/package/react-native-gravityform)
 
-This module includes a react native component for dropping Gravity Forms from your headless Wordpress into your native applications.
+This module includes a react native component for dropping Gravity Forms from your Wordpress site into your native applications.
 
 The package is both **Android** and **iOS** compatible.
 
@@ -63,7 +63,7 @@ Include the component anywhere inside your own components:
 
 ### siteURL
 
-The base URL for your headless Wordpress site where your Gravity Forms are hosted.
+The base URL for your Wordpress site where your Gravity Forms are hosted.
 
 ### formID
 
