@@ -352,7 +352,9 @@ Standard:
 -   [x] HTML
 -   [x] Section Break
 -   [ ] Page Break
-        Advanced:
+
+Advanced:
+
 -   [x] Name
 -   [ ] Date
 -   [ ] Time
